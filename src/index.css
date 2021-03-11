@@ -16,9 +16,6 @@
     .left-side-border {
         border-radius: 1.5rem 0 0 1.5rem;
     }
-    *{
-        transition: .3s;
-    }
     .base-font-size {
         font-size: 16px;
     }
