@@ -7,10 +7,11 @@ const Project = (props) => {
     const [imageHeight, setImageHeight] = useState(0);
     const [containerHeight, setContainerHeight] = useState(0);
     const [shouldScroll, setShouldScroll] = useState(false);
+    const [imageAspectRatio, setImageAspectRatio] = useState('long');
     const imageEl = document.querySelector(`.image${props.id}`);
 
     const scrollHandler = () => {
-        setplxOffset(((window.pageYOffset + window.innerHeight) - imageEl.offsetTop) / 5)
+        setplxOffset(((window.pageYOffset + window.innerHeight) - imageEl.offsetTop) / 6)
         if(shouldScroll) {
             requestAnimationFrame(scrollHandler)
         }
@@ -24,22 +25,46 @@ const Project = (props) => {
     useEffect(() => {   
 
         const imageEl = document.querySelector(`.image${props.id}`);    
-        const imageChild = document.querySelector('.image-child')
+        const imageChild = document.querySelector(`.image-child${props.id}`)
         setImageHeight(imageChild.clientHeight)
         setContainerHeight(imageEl.clientHeight)
         let options = {
             rootMargin: '0px',
             threshold: [0, 0]
           }
-        setTimeout(() => {
-            if(containerHeight || imageHeight === 0) {
+        window.addEventListener('resize', ()=>{
+            if(window.innerWidth > 1000) {
+                setImageAspectRatio('wide')
+            } else if(window.innerWidth > 600) {
+                setImageAspectRatio('mid')
+            } else {
+                setImageAspectRatio('long')
+            }
+            setImageHeight(imageChild.clientHeight)
+            setContainerHeight(imageEl.clientHeight)
+        })
+        let i = 0
+        const heightInterval = setInterval(() => {
+            if(i === 0) {
+                if(window.innerWidth > 1000) {
+                    setImageAspectRatio('wide')
+                } else if(window.innerWidth > 600) {
+                    setImageAspectRatio('mid')
+                } else {
+                    setImageAspectRatio('long')
+                }
+            }
+            if(i<5) {
+                i++
                 setImageHeight(imageChild.clientHeight)
                 setContainerHeight(imageEl.clientHeight)
+                console.log('ok')
+            } else {
+                clearInterval(heightInterval)
             }
-        }, 10);
+        }, 200);
         const intersectionHandler = (entry) => {
             if(entry[0].intersectionRatio > 0) {
-                console.log(entry[0])
                 setShouldScroll(true)
             } else {
                 setShouldScroll(false)
@@ -50,10 +75,10 @@ const Project = (props) => {
     }, []);
 
     return (
-        <div className={`${props.left ? "pr-8 sm:pr-12 md:pr-16 lg:pr-56 xl:pr-100" : "pl-8 sm:pl-12 md:pl-16 md:pl-32"} mb-24 `}>
+        <div className={`${props.left ? "pr-8 sm:pr-12 md:pr-16 lg:pr-56 xl:pr-100 2xl:pr-136" : "pl-8 sm:pl-12 md:pl-16 lg:pl-56 xl:pl-100 2xl:pl-136"} mb-24 `}>
             {/* <img className={`${props.left ? "right-side-border" : "left-side-border"} object-cover h-80 sm:h-96 md:h-104 xl:h-128 w-full `} src={props.image} alt=""/> */}
-            <div className={`${props.left ? "right-side-border" : "left-side-border"} image${props.id} overflow-hidden bg-green-300 h-80 sm:h-96 md:h-104 xl:h-116 2xl:h-124 w-full `} >
-                <img className="w-full relative image-child" style={{transform: `translate(0, ${plxOffset}px)`, top: `-${imageHeight - containerHeight}px`}} src={props.image} alt=""/>
+            <div className={`${props.left ? "right-side-border" : "left-side-border"} image${props.id} overflow-hidden h-80 sm:h-96 md:h-104 xl:h-116 2xl:h-124 w-full `} >
+                <img className={`w-full relative image-child${props.id}`} style={{transform: `translate(0, ${plxOffset}px)`, top: `-${imageHeight - containerHeight}px`}} src={imageAspectRatio === 'long' ? props.imageLong : imageAspectRatio === 'mid' ? props.imageMid : props.imageWide} alt=""/>
             </div>
             <div className={`${props.left ? "right-side-border mr-8 sm:mr-12 md:ml-16 md:rounded-3xl md:max-w-2xl" : "left-side-border ml-8 sm:ml-12 md:mr-16 md:ml-auto md:rounded-3xl md:max-w-2xl "} " bg-white bg-opacity-70 bd-blur p-8 -mt-8 "`} >
                 <h3 className="text-2xl mb-4 font-bold">{props.name}</h3>
