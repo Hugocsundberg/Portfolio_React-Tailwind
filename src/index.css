@@ -1,4 +1,24 @@
-/* ./src/index.css */
+@font-face {
+    font-family: 'Montserrat';
+    font-weight: 300;
+    src: url(./fonts/Montserrat/Montserrat-Light.ttf);
+}
+@font-face {
+    font-family: 'Montserrat';
+    font-weight: 400;
+    src: url(./fonts/Montserrat/Montserrat-Regular.ttf);
+}
+@font-face {
+    font-family: 'Montserrat';
+    font-weight: 600;
+    src: url(./fonts/Montserrat/Montserrat-SemiBold.ttf);
+}
+@font-face {
+    font-family: 'Montserrat';
+    font-weight: 700;
+    src: url(./fonts/Montserrat/Montserrat-Bold.ttf);
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
