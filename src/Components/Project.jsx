@@ -32,16 +32,22 @@ const Project = (props) => {
             rootMargin: '60px',
             threshold: [0, 0]
           }
-        window.addEventListener('resize', ()=>{
-            if(window.innerWidth > 1000) {
-                setImageAspectRatio('wide')
-            } else if(window.innerWidth > 600) {
-                setImageAspectRatio('mid')
-            } else {
-                setImageAspectRatio('long')
-            }
-            setImageHeight(imageChild.clientHeight)
-            setContainerHeight(imageEl.clientHeight)
+          const screenSizeHandler = () => {
+                  if(window.innerWidth > 1000) {
+                      setImageAspectRatio('wide')
+                  } else if(window.innerWidth > 600) {
+                      setImageAspectRatio('mid')
+                  } else {
+                      setImageAspectRatio('long')
+                  }
+                  setImageHeight(imageChild.clientHeight)
+                  setContainerHeight(imageEl.clientHeight)
+          }
+        window.addEventListener('resize', screenSizeHandler)
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                screenSizeHandler()
+            }, 600);
         })
         let i = 0
         const heightInterval = setInterval(() => {
@@ -63,7 +69,7 @@ const Project = (props) => {
             }
         }, 10);
         const intersectionHandler = (entry) => {
-            if(entry[0].isIntersecting === true) {                
+            if(entry[0].isIntersecting === true) {
                 setShouldScroll(true)
             } else if(entry[0].isIntersecting === false) {
                 setShouldScroll(false)
