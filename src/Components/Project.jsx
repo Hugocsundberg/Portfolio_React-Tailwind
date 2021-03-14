@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaGithub } from 'react-icons/fa';
 import { MdWeb } from "react-icons/md";
-import Tilt from 'react-parallax-tilt';
 
 const Project = (props) => {
     const [plxOffset, setplxOffset] = useState(0);
@@ -15,7 +14,7 @@ const Project = (props) => {
         setplxOffset(((window.pageYOffset + window.innerHeight) - imageEl.offsetTop) / 6)
         if(shouldScroll) {
             requestAnimationFrame(scrollHandler)
-        }
+        } 
     }
 
     useEffect(() => {
@@ -25,13 +24,12 @@ const Project = (props) => {
     }, [shouldScroll]);
 
     useEffect(() => {   
-
         const imageEl = document.querySelector(`.image${props.id}`);    
         const imageChild = document.querySelector(`.image-child${props.id}`)
         setImageHeight(imageChild.clientHeight)
         setContainerHeight(imageEl.clientHeight)
         let options = {
-            rootMargin: '0px',
+            rootMargin: '60px',
             threshold: [0, 0]
           }
         window.addEventListener('resize', ()=>{
@@ -65,9 +63,9 @@ const Project = (props) => {
             }
         }, 10);
         const intersectionHandler = (entry) => {
-            if(entry[0].intersectionRatio > 0) {
+            if(entry[0].isIntersecting === true) {                
                 setShouldScroll(true)
-            } else {
+            } else if(entry[0].isIntersecting === false) {
                 setShouldScroll(false)
             }
         }
